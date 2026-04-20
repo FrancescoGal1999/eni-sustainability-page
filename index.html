@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ENI – Sostenibilità e report</title>
+
+  <style>
+
+    /* === RESET E VARIABILI CSS ===
+       Reset universale per coerenza cross-browser.
+       Le custom properties centralizzano colori e valori ricorrenti. */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --eni-blue:        #003865;
+      --eni-green:       #00833D;
+      --eni-light-green: #6AB023;
+      --eni-gray-bg:     #f5f5f5;
+      --eni-text-gray:   #666666;
+      --eni-dark:        #1a1a1a;
+      --white:           #ffffff;
+      --font-main:       'Segoe UI', Arial, sans-serif;
+      --max-width:       1200px;
+    }
+
+    /* === STILI BASE ===
+       Font, dimensione e interlinea predefiniti per tutta la pagina. */
+    body {
+      font-family: var(--font-main);
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--eni-dark);
+      background-color: var(--white);
+    }
+
+    /* Contenitore centrato con larghezza massima 1200px */
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* === HEADER ===
+       Barra fissa in cima alla pagina (sticky) con z-index alto
+       per restare sopra tutti gli altri elementi durante lo scroll. */
+    header {
+      background-color: var(--eni-blue);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 14px 20px;
+    }
+
+    .logo {
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--white);
+      text-decoration: none;
+      letter-spacing: -1px;
+    }
+
+    .logo span { color: var(--eni-light-green); }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 28px;
+    }
+
+    nav a {
+      color: var(--white);
+      text-decoration: none;
+      font-size: 0.88rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover { color: var(--eni-light-green); }
+
+    /* === HERO ===
+       Gradiente blu-verde come sfondo. L'elemento ::before aggiunge
+       un cerchio decorativo semitrasparente in alto a destra. */
+    .hero {
+      background: linear-gradient(135deg, var(--eni-blue) 0%, #005a9e 50%, var(--eni-green) 100%);
+      color: var(--white);
+      padding: 110px 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 550px;
+      height: 550px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+      top: -130px;
+      right: -80px;
+      pointer-events: none;
+    }
+
+    .hero h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero p {
+      font-size: 1.15rem;
+      max-width: 680px;
+      margin: 0 auto 38px;
+      opacity: 0.92;
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn-cta {
+      display: inline-block;
+      background-color: var(--eni-green);
+      color: var(--white);
+      padding: 14px 38px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: 700;
+      position: relative;
+      z-index: 1;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-cta:hover {
+      background-color: #005f2d;
+      transform: translateY(-2px);
+    }
+
+    /* === INTESTAZIONI DI SEZIONE ===
+       La riga verde sotto il titolo è generata con ::after
+       senza aggiungere markup HTML aggiuntivo. */
+    .section-title {
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: var(--eni-blue);
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 55px;
+      height: 4px;
+      background-color: var(--eni-green);
+      margin: 12px auto 0;
+      border-radius: 2px;
+    }
+
+    .section-subtitle {
+      text-align: center;
+      color: var(--eni-text-gray);
+      max-width: 680px;
+      margin: 0 auto 55px;
+    }
+
+    /* === SEZIONE MISSIONE ===
+       Griglia a tre colonne con CSS Grid. */
+    .mission {
+      padding: 80px 0;
+      background-color: var(--white);
+    }
+
+    .mission-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+    }
+
+    .mission-item { text-align: center; padding: 25px 15px; }
+
+    .mission-icon {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background-color: var(--eni-green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 18px;
+      font-size: 1.7rem;
+    }
+
+    .mission-item h3 { color: var(--eni-blue); margin-bottom: 10px; }
+    .mission-item p  { color: var(--eni-text-gray); font-size: 0.93rem; }
+
+    /* === PILASTRI DI SOSTENIBILITÀ ===
+       Card su griglia 2x2. Il bordo verde a sinistra richiama
+       l'identità visiva ENI. L'effetto hover solleva la card
+       tramite transform e intensifica l'ombra. */
+    .pillars {
+      padding: 80px 0;
+      background-color: var(--eni-gray-bg);
+    }
+
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 28px;
+    }
+
+    .pillar-card {
+      background-color: var(--white);
+      border-radius: 8px;
+      padding: 38px 30px;
+      border-left: 5px solid var(--eni-green);
+      box-shadow: 0 3px 15px rgba(0,0,0,0.07);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .pillar-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.13);
+    }
+
+    .pillar-icon { font-size: 2.4rem; margin-bottom: 16px; display: block; }
+    .pillar-card h3 { color: var(--eni-blue); font-size: 1.2rem; margin-bottom: 12px; }
+    .pillar-card p  { color: var(--eni-text-gray); font-size: 0.93rem; margin-bottom: 15px; }
+
+    /* Lista personalizzata con triangolino verde come bullet */
+    .pillar-list { list-style: none; }
+
+    .pillar-list li {
+      position: relative;
+      padding-left: 18px;
+      padding-bottom: 5px;
+      font-size: 0.88rem;
+      color: var(--eni-text-gray);
+    }
+
+    .pillar-list li::before {
+      content: '▶';
+      position: absolute;
+      left: 0; top: 6px;
+      font-size: 0.55rem;
+      color: var(--eni-green);
+    }
+
+    /* === KPI ===
+       Sfondo che presenta il gradiente blu per creare contrasto con le sezioni
+       adiacenti. Griglia a 4 colonne con bordi semitrasparenti. */
+    .kpi {
+      padding: 80px 0;
+      background: linear-gradient(135deg, var(--eni-blue), #005a9e);
+      color: var(--white);
+    }
+
+    .kpi .section-title   { color: var(--white); }
+    .kpi .section-subtitle { color: rgba(255,255,255,0.78); }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 22px;
+    }
+
+    .kpi-item {
+      text-align: center;
+      padding: 28px 12px;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.06);
+    }
+
+    .kpi-value {
+      display: block;
+      font-size: 2.3rem;
+      font-weight: 700;
+      color: var(--eni-light-green);
+      margin-bottom: 6px;
+    }
+
+    .kpi-label {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.78);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    /* === DOWNLOAD REPORT ===
+       Griglia a 3 colonne. Le card usano flex-direction:column
+       così il testo si espande (flex-grow:1) e il pulsante
+       rimane sempre in fondo, a prescindere dalla lunghezza
+       del contenuto. Il download avviene tramite l'attributo
+       HTML nativo 'download' sul tag <a>. */
+    .reports {
+      padding: 80px 0;
+      background-color: var(--white);
+    }
+
+    .reports-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .report-card {
+      border: 1px solid #e2e2e2;
+      border-radius: 8px;
+      padding: 28px 22px;
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .report-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.11); }
+
+    .report-year {
+      display: inline-block;
+      background-color: var(--eni-green);
+      color: var(--white);
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 3px 11px;
+      border-radius: 20px;
+      margin-bottom: 13px;
+      align-self: flex-start;
+    }
+
+    .report-card h3 { color: var(--eni-blue); font-size: 1rem; margin-bottom: 10px; }
+    .report-card p  { color: var(--eni-text-gray); font-size: 0.88rem; flex-grow: 1; margin-bottom: 16px; }
+
+    .report-meta {
+      font-size: 0.78rem;
+      color: var(--eni-text-gray);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 18px;
+    }
+
+    .report-meta::before { content: '📄'; }
+
+    .btn-download {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      background-color: var(--eni-blue);
+      color: var(--white);
+      padding: 11px 18px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-download:hover { background-color: var(--eni-green); }
+
+    /* === FOOTER === */
+    footer {
+      background-color: #111111;
+      color: rgba(255,255,255,0.65);
+      padding: 38px 20px;
+      text-align: center;
+    }
+
+    footer p   { font-size: 0.85rem; margin-bottom: 7px; }
+    footer a   { color: var(--eni-light-green); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* === RESPONSIVE (media query) ===
+       Approccio desktop-first: si riduce il numero di colonne
+       scendendo verso tablet (1024px) e smartphone (768px). */
+    @media (max-width: 1024px) {
+      .kpi-grid      { grid-template-columns: repeat(2, 1fr); }
+      .reports-grid  { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .hero h1       { font-size: 1.9rem; }
+      nav            { display: none; }
+      .mission-grid,
+      .pillars-grid,
+      .reports-grid  { grid-template-columns: 1fr; }
+      .kpi-grid      { grid-template-columns: repeat(2, 1fr); }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- Header con navigazione sticky -->
+  <header role="banner">
+    <div class="header-inner">
+      <a href="#" class="logo" aria-label="ENI – Homepage">E<span>ni</span></a>
+      <nav role="navigation" aria-label="Navigazione principale">
+        <ul>
+          <li><a href="#missione">Missione</a></li>
+          <li><a href="#pilastri">Sostenibilità</a></li>
+          <li><a href="#kpi">Risultati 2024</a></li>
+          <li><a href="#report">Download report</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- Hero: primo impatto visivo con link-ancora alla sezione download -->
+    <section class="hero">
+      <div class="container">
+        <h1>Sostenibilità ENI</h1>
+        <p>Il nostro impegno concreto verso un futuro energetico più pulito,
+           giusto e accessibile. Scopri le iniziative e scarica i report ufficiali.</p>
+        <a href="#report" class="btn-cta">↓ Scarica i Report</a>
+      </div>
+    </section>
+
+    <!-- Sezione Missione -->
+    <section class="mission" id="missione">
+      <div class="container">
+        <h2 class="section-title">La nostra missione</h2>
+        <p class="section-subtitle">ENI supporta la transizione energetica, si pone la finalità di preservare il pianeta e di promuovere l'accesso
+           sostenibile all'energia per tutti.</p>
+        <div class="mission-grid">
+          <div class="mission-item">
+            <div class="mission-icon">🌍</div>
+            <h3>Transizione energetica</h3>
+            <p>Neutralità carbonica entro il 2050 attraverso biocarburanti, rinnovabili e CCUS.</p>
+          </div>
+          <div class="mission-item">
+            <div class="mission-icon">🤝</div>
+            <h3>Responsabilità sociale</h3>
+            <p>Trasparenza, rispetto dei diritti umani, sviluppo delle comunità locali.</p>
+          </div>
+          <div class="mission-item">
+            <div class="mission-icon">🔬</div>
+            <h3>Innovazione Tecnologica</h3>
+            <p>Ricerca su fusione magnetica, scienze biotecnologiche e soluzioni energetiche avanzate.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pilastri di sostenibilità: 4 card in griglia 2x2 -->
+    <section class="pillars" id="pilastri">
+      <div class="container">
+        <h2 class="section-title">I pilastri della sostenibilità</h2>
+        <p class="section-subtitle">Quattro aree strategiche conformi agli standard ESRS e agli SDGs ONU.</p>
+        <div class="pillars-grid">
+
+          <div class="pillar-card">
+            <span class="pillar-icon">🌿</span>
+            <h3>Clima e decarbonizzazione</h3>
+            <p>Percorso verso la carbon neutrality al 2050 con obiettivi su Scope 1, Scope 2 e Scope 3.</p>
+            <ul class="pillar-list">
+              <li>Target net zero emissioni GHG entro il 2050</li>
+              <li>Bioraffinazione HVO (Enilive)</li>
+              <li>Investimenti in CCUS e fusione magnetica</li>
+              <li>Mobilità sostenibile tramite HVOlution</li>
+            </ul>
+          </div>
+
+          <div class="pillar-card">
+            <span class="pillar-icon">👷</span>
+            <h3>Persone e Sicurezza</h3>
+            <p>Salute e sicurezza dei lavoratori come priorità assoluta, monitorata tramite TRIR.</p>
+            <ul class="pillar-list">
+              <li>TRIR forza lavoro 2024: 0,69</li>
+              <li>288 milioni di ore lavorate totali</li>
+              <li>Tutela dei diritti umani dei lavoratori</li>
+              <li>Formazione del capitale umano</li>
+            </ul>
+          </div>
+
+          <div class="pillar-card">
+            <span class="pillar-icon">🏘️</span>
+            <h3>Comunità e territorio</h3>
+            <p>Investimenti nell'ambito dello sviluppo locale, dell'accesso all'acqua e della cooperazione internazionale.</p>
+            <ul class="pillar-list">
+              <li>Oltre 2 milioni di persone con accesso all'acqua</li>
+              <li>88,8 milioni di euro investiti in comunità locali</li>
+              <li>Programmi di educazione e formazione</li>
+              <li>Diversificazione economica locale</li>
+            </ul>
+          </div>
+
+          <div class="pillar-card">
+            <span class="pillar-icon">🔗</span>
+            <h3>Supply Chain e Governance</h3>
+            <p>Sostenibilità della filiera tramite Open-es e valutazione ESG dei fornitori.</p>
+            <ul class="pillar-list">
+              <li>Oltre 28.000 aziende su Open-es</li>
+              <li>100% fornitori strategici valutati ESG</li>
+              <li>Compliance normativa e anti-corruzione</li>
+              <li>Rendicontazione secondo standard ESRS</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- KPI: indicatori numerici su sfondo blu -->
+    <section class="kpi" id="kpi">
+      <div class="container">
+        <h2 class="section-title">I numeri della sostenibilità 2024</h2>
+        <p class="section-subtitle">Principali indicatori estratti dall'Annual Report 2024.</p>
+        <div class="kpi-grid">
+          <div class="kpi-item"><span class="kpi-value">0,69</span><span class="kpi-label">TRIR – Indice infortuni</span></div>
+          <div class="kpi-item"><span class="kpi-value">2M+</span><span class="kpi-label">Persone con accesso all'acqua</span></div>
+          <div class="kpi-item"><span class="kpi-value">€88,8M</span><span class="kpi-label">Investimenti comunità locali</span></div>
+          <div class="kpi-item"><span class="kpi-value">28K+</span><span class="kpi-label">Aziende su Open-es</span></div>
+          <div class="kpi-item"><span class="kpi-value">1,71M</span><span class="kpi-label">boe/giorno (produzione 2024)</span></div>
+          <div class="kpi-item"><span class="kpi-value">2050</span><span class="kpi-label">Target Carbon Neutrality</span></div>
+          <div class="kpi-item"><span class="kpi-value">100%</span><span class="kpi-label">Fornitori strategici valutati ESG</span></div>
+          <div class="kpi-item"><span class="kpi-value">60+</span><span class="kpi-label">Paesi di presenza globale</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Download report
+         L'attributo 'download' sul tag <a> avvia il download
+         del file PDF senza aprirlo nel browser. -->
+    <section class="reports" id="report">
+      <div class="container">
+        <h2 class="section-title">Scarica i report di sostenibilità</h2>
+        <p class="section-subtitle">Documenti ufficiali ENI scaricabili direttamente da questa pagina.</p>
+        <div class="reports-grid">
+
+          <div class="report-card">
+            <span class="report-year">2024</span>
+            <h3>Annual Report & Sustainability Statement 2024</h3>
+            <p>Report integrato con Dichiarazione di Sostenibilità secondo il D.Lgs. 125/2024 e l'ESRS. Include clima, persone, comunità, governance e tassonomia EU.</p>
+            <div class="report-meta">PDF – 492 pagine</div>
+            <a href="reports/ENI-Annual-Report-2024.pdf" download="ENI-Annual-Report-2024.pdf" class="btn-download">⬇ Scarica PDF</a>
+          </div>
+
+          <div class="report-card">
+            <span class="report-year">2023</span>
+            <h3>Dichiarazione Consolidata Non Finanziaria 2023</h3>
+            <p>Report di sostenibilità 2023 secondo il D.Lgs. 254/2016 e il GRI Standards. Utile per confrontare i dati con quelli dell'anno corrente.</p>
+            <div class="report-meta">PDF – 380 pagine</div>
+            <a href="reports/ENI-DCNF-2023.pdf" download="ENI-Sostenibilita-2023.pdf" class="btn-download">⬇ Scarica PDF</a>
+          </div>
+
+          <div class="report-card">
+            <span class="report-year">2024</span>
+            <h3>Climate Report 2024</h3>
+            <p>Approfondimento sulla strategia di decarbonizzazione e sugli obiettivi di riduzione GHG su Scope 1, 2 e 3 verso il net zero al 2050.</p>
+            <div class="report-meta">PDF – 120 pagine</div>
+            <a href="reports/ENI-Climate-Report-2024.pdf" download="ENI-Climate-Report-2024.pdf" class="btn-download">⬇ Scarica PDF</a>
+          </div>
+
+          <div class="report-card">
+            <span class="report-year">2024</span>
+            <h3>People & Planet Report 2024</h3>
+            <p>Dati sulla dimensione sociale: sicurezza, diritti umani, sviluppo del capitale umano ed impatti sulle comunità locali.</p>
+            <div class="report-meta">PDF – 95 pagine</div>
+            <a href="reports/ENI-People-Planet-2024.pdf" download="ENI-People-Planet-2024.pdf" class="btn-download">⬇ Scarica PDF</a>
+          </div>
+
+          <div class="report-card">
+            <span class="report-year">2024</span>
+            <h3>Supply Chain Sustainability Report 2024</h3>
+            <p>Approccio ENI alla valutazione ESG dei fornitori; focus sulla piattaforma Open-es e sui programmi di sviluppo della filiera.</p>
+            <div class="report-meta">PDF – 68 pagine</div>
+            <a href="reports/ENI-SupplyChain-2024.pdf" download="ENI-SupplyChain-2024.pdf" class="btn-download">⬇ Scarica PDF</a>
+          </div>
+
+          <div class="report-card">
+            <span class="report-year">2024</span>
+            <h3>Rendicontazione Tassonomia UE 2024</h3>
+            <p>Rendicontazione ai sensi dell'art. 8 del regolamento UE 852/2020: classificazione delle attività ENI secondo i criteri di sostenibilità europei.</p>
+            <div class="report-meta">PDF – 55 pagine</div>
+            <a href="reports/ENI-Taxonomy-EU-2024.pdf" download="ENI-Taxonomy-EU-2024.pdf" class="btn-download">⬇ Scarica PDF</a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer con link al sito ufficiale ENI -->
+  <footer role="contentinfo">
+    <div class="container">
+      <p><strong>ENI S.p.A.</strong> – Piazzale Enrico Mattei 1, 00144 Roma</p>
+      <p>
+        <a href="https://www.eni.com" target="_blank" rel="noopener">www.eni.com</a> –
+        <a href="https://www.eni.com/it-IT/sostenibilita.html" target="_blank" rel="noopener">Sezione Sostenibilità</a>
+      </p>
+    </div>
+  </footer>
+</body>
+</html>
